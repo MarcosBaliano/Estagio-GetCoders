@@ -1,0 +1,80 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                Listagem de Pessoas
+            </h2>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <button mat-flat-button [color]="'primary'" (click)="abrirFormulario()">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                <span class="ml-2">Nova Pessoa</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="p-6 sm:p-10 max-w-screen-xl mx-auto w-full">
+
+        <div class="flex flex-col sm:flex-row items-center justify-start gap-4 mb-8 p-6 bg-card rounded-2xl shadow">
+
+            <div class="relative w-full sm:w-80">
+                <input #cpfInput
+                       type="text"
+                       placeholder="Buscar por CPF..."
+                       class="w-full h-12 px-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+            </div>
+
+            <button (click)="pesquisar(cpfInput.value)"
+                    class="h-12 px-6 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors shadow-sm">
+                Pesquisar
+            </button>
+
+            <button (click)="cpfInput.value = ''; listarTodas()"
+                    class="h-12 px-6 text-sm font-medium text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl transition-colors">
+                Limpar
+            </button>
+        </div>
+
+        <div class="overflow-x-auto bg-card rounded-2xl shadow">
+            <table class="w-full text-left text-sm text-gray-500">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-700 font-bold border-b">
+                    <tr>
+                        <th class="px-6 py-4">CPF</th>
+                        <th class="px-6 py-4">Nome</th>
+                        <th class="px-6 py-4">Telefone</th>
+                        <th class="px-6 py-4 text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr *ngFor="let pessoa of pessoas" class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 font-medium text-gray-900">{{ pessoa.cpf }}</td>
+                        <td class="px-6 py-4">{{ pessoa.nome }}</td>
+                        <td class="px-6 py-4">{{ pessoa.telefone }}</td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex items-center justify-center gap-2">
+
+                                <button mat-icon-button (click)="editar(pessoa)" type="button">
+                                    <mat-icon
+                                        class="text-blue-600 icon-size-5"
+                                        [svgIcon]="'heroicons_outline:pencil'"></mat-icon>
+                                </button>
+
+                                <button mat-icon-button (click)="deletar(pessoa.cpf)" type="button">
+                                    <mat-icon
+                                        class="text-red-600 icon-size-5"
+                                        [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                </button>
+
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div *ngIf="pessoas?.length === 0" class="p-12 text-center">
+                <p class="text-gray-400 text-lg">Nenhuma pessoa encontrada.</p>
+            </div>
+        </div>
+    </div>
+</div>

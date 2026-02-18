@@ -1,0 +1,77 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-center font-medium text-secondary">
+                <a class="whitespace-nowrap text-primary-500 cursor-pointer" (click)="voltar()">Listagem</a>
+                <div class="flex items-center ml-1 whitespace-nowrap">
+                    <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+                    <span class="ml-1 text-secondary">{{ isEdicao ? 'Editar' : 'Novo' }} Pessoa</span>
+                </div>
+            </div>
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    {{ isEdicao ? 'Atualizar Cadastro' : 'Nova Pessoa' }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="max-w-3xl">
+            <form [formGroup]="pessoaForm" class="flex flex-col mt-4 p-8 bg-card rounded-2xl shadow overflow-hidden">
+
+                <mat-form-field class="w-full">
+                    <mat-label>CPF</mat-label>
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:identification'"></mat-icon>
+                    <input matInput formControlName="cpf" placeholder="000.000.000-00">
+                    <mat-hint *ngIf="isEdicao">O CPF não pode ser alterado por ser um identificador único.</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                    <mat-label>Nome Completo</mat-label>
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user'"></mat-icon>
+                    <input matInput formControlName="nome">
+                </mat-form-field>
+
+                <div class="flex flex-col gt-xs:flex-row gt-xs:gap-4">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Telefone</mat-label>
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:phone'"></mat-icon>
+                        <input matInput formControlName="telefone">
+                    </mat-form-field>
+
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Data de Nascimento</mat-label>
+                        <input matInput type="date" formControlName="dataNascimento">
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field class="w-full">
+                    <mat-label>Endereço</mat-label>
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                    <textarea matInput formControlName="endereco" rows="2"></textarea>
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                    <mat-label>Escolaridade</mat-label>
+                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:academic-cap'"></mat-icon>
+                    <input matInput formControlName="escolaridade">
+                </mat-form-field>
+
+                <div class="flex items-center justify-end mt-8 gap-3">
+                    <button mat-button type="button" (click)="voltar()">
+                        Cancelar
+                    </button>
+                    <button
+                        mat-flat-button
+                        [color]="'primary'"
+                        (click)="salvar()"
+                        [disabled]="pessoaForm.invalid">
+                        {{ isEdicao ? 'Salvar Alterações' : 'Cadastrar Pessoa' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
