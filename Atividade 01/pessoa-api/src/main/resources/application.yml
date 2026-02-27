@@ -5,7 +5,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/pessoa
     username: postgres
     password: postgres
-jpa:
+  jpa:
     hibernate:
       ddl-auto: update
     show-sql: true

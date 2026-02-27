@@ -1,47 +1,56 @@
 package br.com.getcoders.pessoa.controller;
 
 import br.com.getcoders.pessoa.infrastructure.entitys.Pessoa;
-import br.com.getcoders.pessoa.infrastructure.repository.PessoaRepository;
-import lombok.RequiredArgsConstructor;
+import br.com.getcoders.pessoa.service.PessoaService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/pessoas")
-@RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PessoaController {
-    private final PessoaRepository repository;
 
-    // Salva os dados que vem lá do formulário
-    @PostMapping
-    public Pessoa salvar(@RequestBody Pessoa pessoa){
-        return repository.save(pessoa);
+    private final PessoaService service;
+
+    public PessoaController(PessoaService service) {
+        this.service = service;
     }
 
-    // Traz a galera toda pra aparecer na lista do site
     @GetMapping
-    public List<Pessoa> listar(){
-        return repository.findAll();
+    public ResponseEntity<List<Pessoa>> listar() {
+        return ResponseEntity.ok(service.listarTodos());
     }
 
-    //busca só um pelo CPF pra barra de pesquisa
     @GetMapping("/{cpf}")
-    public Pessoa buscarPorCpf(@PathVariable String cpf) {
-        return repository.findById(cpf).orElse(null);
+    public ResponseEntity<Pessoa> buscar(@PathVariable String cpf) {
+        try {
+            return ResponseEntity.ok(service.buscarPorCpf(cpf));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna 404
+        }
     }
 
-    // Apaga o registro do banco usando o CPF que vem na URL
-    @DeleteMapping("/{cpf}")
-    public void deletar(@PathVariable String cpf){
-        repository.deleteById(cpf);
+    @PostMapping
+    public ResponseEntity<Pessoa> criar(@RequestBody Pessoa pessoa) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(pessoa));
     }
 
-    //atualiza os dados da pessoa
     @PutMapping("/{cpf}")
-    public Pessoa atualizar(@PathVariable String cpf, @RequestBody Pessoa pessoa) {
+    public ResponseEntity<Pessoa> atualizar(@PathVariable String cpf, @RequestBody Pessoa pessoa) {
         pessoa.setCpf(cpf);
-        return repository.save(pessoa);
+        return ResponseEntity.ok(service.salvar(pessoa));
+    }
+
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<Void> deletar(@PathVariable String cpf) {
+        try {
+            service.deletar(cpf);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorna 404
+        }
     }
 }
