@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Pessoa } from '../entitys/pessoa.entity';
+import { Pessoa } from '../entities/pessoa.entitie';
 
 @Injectable()
 export class PessoaService {
@@ -21,7 +21,7 @@ export class PessoaService {
   buscarPorCpf(cpf: string) {
     return this.repository.findOneBy({ cpf });
   }
-  atualizar(cpf: string, dados: any) {
+  atualizar(cpf: string, dados: Partial<Pessoa>) {
     return this.repository.save({ ...dados, cpf });
   }
   // Apaga o registro do banco usando o CPF
